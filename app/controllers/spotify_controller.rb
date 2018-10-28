@@ -1,11 +1,9 @@
 class SpotifyController < ApplicationController
 
     def login
-        if params[:error]
+        if params[:error] || !params[:state] || params[:state] != Rails.application.credentials.secret_key_base
             return
         end
-
-        # TODO add app secret state
 
         body = {
             grant_type: 'authorization_code',
