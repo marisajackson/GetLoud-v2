@@ -40,4 +40,50 @@ class SpotifyController < ApplicationController
 
         render :json => spotify_user
     end
+
+    def artists
+      # https://api.spotify.com/v1/search
+      spotify_user = SpotifyUser.first
+      header = { Authorization: "Bearer #{spotify_user.access_token}" }
+
+      artists = Artist.includes(:genres).where(genres: { id: nil })
+      artist = nil
+
+      artists.each do |item|
+        query_params = {
+          # q: 'childish gambino',
+          q: item.name,
+          type: 'artist'
+        }
+
+        artist_response = RestClient.get("https://api.spotify.com/v1/search?#{query_params.to_query}", header)
+
+        artist = JSON.parse(artist_response.body)
+        artist = artist['artists']['items'][0]
+
+        if artist
+          item.spotify_id = artist['id']
+          item.save!
+          genres = artist['genres']
+
+          if genres
+            genres.each do |genre|
+              gl_genre = Genre.find_or_create_by(name: genre)
+              artist_genre = ArtistGenre.where(genre_id: gl_genre.id)
+                           .where(artist_id: item.id)
+                           .first
+
+              if !artist_genre
+                artist_genre = ArtistGenre.new
+                artist_genre.genre_id = gl_genre.id
+                artist_genre.artist_id = item.id
+                artist_genre.save!
+              end
+            end
+          end
+        end
+      end
+
+      render :json => artist
+    end
 end
