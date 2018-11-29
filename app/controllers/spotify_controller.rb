@@ -97,8 +97,6 @@ class SpotifyController < ApplicationController
       artists = nil
 
       time_ranges.each do |range|
-        puts 'HELLO'
-        puts range
         query_params = {
           limit: 50,
           time_range: range
