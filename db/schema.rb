@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_07_191127) do
+ActiveRecord::Schema.define(version: 2018_11_26_090827) do
 
   create_table "artist_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "genre_id"
@@ -53,6 +53,24 @@ ActiveRecord::Schema.define(version: 2018_11_07_191127) do
     t.string "name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "spotify_user_artists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "spotify_user_id"
+    t.bigint "artist_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["artist_id"], name: "index_spotify_user_artists_on_artist_id"
+    t.index ["spotify_user_id"], name: "index_spotify_user_artists_on_spotify_user_id"
+  end
+
+  create_table "spotify_user_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "spotify_user_id"
+    t.bigint "genre_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["genre_id"], name: "index_spotify_user_genres_on_genre_id"
+    t.index ["spotify_user_id"], name: "index_spotify_user_genres_on_spotify_user_id"
   end
 
   create_table "spotify_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

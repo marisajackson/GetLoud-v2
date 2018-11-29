@@ -86,4 +86,76 @@ class SpotifyController < ApplicationController
 
       render :json => artist
     end
+
+    def user_artists
+      spotify_user = SpotifyUser.first # TODO: this should be based on the logged in user
+      header = { Authorization: "Bearer #{spotify_user.access_token}" }
+
+      # GET https://api.spotify.com/v1/me/top/artists (tracks is also available)
+
+      time_ranges = ['short_term', 'long_term', 'medium_term']
+      artists = nil
+
+      time_ranges.each do |range|
+        puts 'HELLO'
+        puts range
+        query_params = {
+          limit: 50,
+          time_range: range
+        }
+
+        artists_response = RestClient.get("https://api.spotify.com/v1/me/top/artists?#{query_params.to_query}", header)
+
+        artists = JSON.parse(artists_response.body)
+        artists = artists['items']
+
+        artists.each do |artist|
+          gl_artist = Artist.find_or_create_by(name: artist['name'])
+          gl_artist.spotify_id = artist['id']
+          gl_artist.save!
+          genres = artist['genres']
+
+          user_artist = SpotifyUserArtist.where(spotify_user_id: spotify_user.id)
+                       .where(artist_id: gl_artist.id)
+                       .first
+
+          if !user_artist
+            user_artist = SpotifyUserArtist.new
+            user_artist.spotify_user_id = spotify_user.id
+            user_artist.artist_id = gl_artist.id
+            user_artist.save!
+          end
+
+          if genres
+            genres.each do |genre|
+              gl_genre = Genre.find_or_create_by(name: genre)
+              artist_genre = ArtistGenre.where(genre_id: gl_genre.id)
+                           .where(artist_id: gl_artist.id)
+                           .first
+
+              if !artist_genre
+                artist_genre = ArtistGenre.new
+                artist_genre.genre_id = gl_genre.id
+                artist_genre.artist_id = gl_artist.ids
+                artist_genre.save!
+              end
+
+              user_genre = SpotifyUserGenre.where(genre_id: gl_genre.id)
+                           .where(spotify_user_id: spotify_user.id)
+                           .first
+
+              if !user_genre
+                user_genre = SpotifyUserGenre.new
+                user_genre.genre_id = gl_genre.id
+                user_genre.spotify_user_id = spotify_user.id
+                user_genre.save!
+              end
+            end
+          end
+        end
+      end
+
+
+      render :json => artists
+    end
 end
