@@ -7,4 +7,7 @@ Rails.application.routes.draw do
   get 'spotify/user/artists', to: 'spotify#user_artists'
 
   get 'events/ticketmaster', to: 'event#ticketmaster'
+  get 'events/events', to: 'event#events'
+
+  get 'playlists/create', to: 'playlist#create'
 end

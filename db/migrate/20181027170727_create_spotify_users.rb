@@ -7,6 +7,7 @@ class CreateSpotifyUsers < ActiveRecord::Migration[5.2]
 
       t.string :access_token,       null: false, default: ""
       t.string :refresh_token,      null: false, default: ""
+      t.datetime :expires_at,      null: true
 
       t.references :user, foreign_key: true
 

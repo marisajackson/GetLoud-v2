@@ -4,8 +4,8 @@ class EventController < ApplicationController
         apikey: Rails.application.credentials.ticketmaster[:api_key],
         city: 'Nashville',
         segmentId: Rails.application.credentials.ticketmaster[:music_segment_id],
-        startDateTime: '2018-12-01T10:34:00Z',
-        endDateTime: '2019-01-31T10:34:00Z',
+        startDateTime: '2019-03-01T10:34:00Z',
+        endDateTime: '2019-09-30T10:34:00Z',
         size: 200,
     }
 
@@ -69,6 +69,14 @@ class EventController < ApplicationController
 
 
      render :json => event_response
+  end
+
+  def events
+    spotify_user = SpotifyUser.last
+
+    playlist = Playlist.where('spotify_user_id = ?', spotify_user.id).includes(:events).first
+
+    render :json => playlist.events
   end
 
   def check_artist_event(artist, date)

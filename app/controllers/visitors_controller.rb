@@ -1,13 +1,5 @@
 class VisitorsController < ApplicationController
     def index
-        query_params = {
-            response_type: 'code',
-            client_id: Rails.application.credentials.spotify[:client_id],
-            scope: 'user-read-private user-read-email playlist-modify-public playlist-modify-private user-top-read',
-            redirect_uri: Rails.application.credentials.spotify[:redirect_uri],
-            state: Rails.application.credentials.secret_key_base
-        }
-
-        redirect_to "https://accounts.spotify.com/authorize?#{query_params.to_query}"
+        redirect_to SpotifyService.new(SpotifyUser.first).create_auth_url
     end
 end
