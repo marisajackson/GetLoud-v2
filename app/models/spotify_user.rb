@@ -14,4 +14,11 @@ class SpotifyUser < ApplicationRecord
 
   has_many :related_artist_links, -> { where("relation_type = ?", 1) }, class_name: 'SpotifyUserArtist'
   has_many :related_artists, class_name: 'Artist', through: :related_artist_links, source: :artist
+
+  has_many :events, through: :event_artists
+  # has_many :event_artists, through: :events
+
+  def with_event_artists
+
+  end
 end

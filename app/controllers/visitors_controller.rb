@@ -1,5 +1,13 @@
 class VisitorsController < ApplicationController
     def index
-        redirect_to SpotifyService.new(SpotifyUser.first).create_auth_url
+      if user_signed_in?
+        if current_user.metro_area
+          render "home"
+        else
+          render "users/setup"
+        end
+      else
+        @spotify_auth_url = SpotifyService.new(SpotifyUser.first).create_auth_url
+      end
     end
 end

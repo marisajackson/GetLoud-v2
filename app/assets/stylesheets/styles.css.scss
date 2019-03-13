@@ -1,0 +1,34 @@
+@font-face {
+  font-family: "Permanent Marker";
+  src: asset-data-url("fonts/PermanentMarker-Regular.ttf");
+}
+
+#background {
+  background-image: asset-data-url('bg.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+h1 {
+  font-family: 'Permanent Marker';
+  font-size: 8rem;
+  color: white;
+}
+
+.login {
+  font-family: 'Permanent Marker';
+  text-align: center;
+  width: 100%;
+  margin-top: 50px;
+}
+
+.spotify-button {
+  width: 350px;
+  border: none;
+  padding: 10px;
+  padding-left: 15px;
+  font-size: 30px;
+  border-radius: 40px;
+  background-color: #1DB954;
+  color: white;
+}

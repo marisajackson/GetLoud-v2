@@ -6,7 +6,9 @@ class SpotifyUserSetUpJob < ApplicationJob
     spotify_service = SpotifyService.new(spotify_user)
     spotify_service.sync_user_artists
     spotify_service.sync_user_related_artists
-    spotify_service.update_playlist
+
+    SpotifyPlaylistJob.perform_later spotify_user
+
     logger.info "Finishing Job: Set Up Spotify User: #{spotify_user.spotify_id}"
   end
 end

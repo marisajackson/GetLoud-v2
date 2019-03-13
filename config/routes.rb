@@ -3,11 +3,5 @@ Rails.application.routes.draw do
   devise_for :users
 
   get 'spotify/login', to: 'spotify#login'
-  get 'spotify/artists', to: 'spotify#artists'
-  get 'spotify/user/artists', to: 'spotify#user_artists'
-
-  get 'events/ticketmaster', to: 'event#ticketmaster'
-  get 'events/events', to: 'event#events'
-
-  get 'playlists/create', to: 'playlist#create'
+  put 'users/metro-area', to: 'users#set_metro_area'
 end

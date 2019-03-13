@@ -25,14 +25,19 @@ class SpotifyController < ApplicationController
 
         generated_password = Devise.friendly_token.first(8)
 
-        user = User.find_or_initialize_by('email': user_params['email'])
-        user.password = generated_password
-        user.password_confirmation = generated_password
-        user.save!
+        # @user = User.find_or_initialize_by('email': user_params['email'])
+        @user = User.find_by('email': user_params['email'])
+        if(!@user)
+          @user = User.new
+          @user.email = user_params['email']
+          @user.password = generated_password
+          @user.password_confirmation = generated_password
+          @user.save!
+        end
 
         spotify_user = SpotifyUser.find_or_create_by(spotify_id: user_params['id'])
         spotify_user.display_name = user_params['display_name']
-        spotify_user.user_id = user.id
+        spotify_user.user_id = @user.id
         spotify_user.email = user_params['email']
         spotify_user.access_token = auth_params['access_token']
         spotify_user.refresh_token = auth_params['refresh_token']
@@ -41,16 +46,8 @@ class SpotifyController < ApplicationController
 
         SpotifyUserSetUpJob.perform_later spotify_user
 
-        render :json => spotify_user
-    end
+        sign_in @user
 
-    def artists
-      spotify_users = SpotifyUser.all
-
-      spotify_users.each do |spotify_user|
-        SpotifyUserSetUpJob.perform_later spotify_user
-      end
-
-      render :json => spotify_users
+        render "users/setup"
     end
 end

@@ -154,8 +154,9 @@ class SpotifyService
   end
 
   def update_playlist
-    spotify_user = SpotifyUser.includes(:event_artists).find_by(id: @spotify_user.id)
-    artists = spotify_user.event_artists
+    user = User.find_by(@spotify_user.user_id)
+    spotify_user = SpotifyUser.includes(:artists => :events).where(artists: {events: {metro_area: user.metro_area}}).find_by(id: @spotify_user.id)
+    artists = spotify_user.artists
     header = {Authorization: "Bearer #{spotify_user.access_token}"}
 
     playlist = Playlist.where('spotify_user_id = ?', spotify_user.id).last
@@ -214,6 +215,43 @@ class SpotifyService
       playlist_track_params = { uris: tracklist }
 
       RestClient.post("https://api.spotify.com/v1/playlists/#{playlist.spotify_id}/tracks", playlist_track_params.to_json, header)
+    end
+  end
+
+  def update_artist(artist_item)
+    # https://api.spotify.com/v1/search
+    header = { Authorization: "Bearer #{@spotify_user.access_token}" }
+
+    query_params = {
+      q: artist_item.name,
+      type: 'artist'
+    }
+
+    artist_response = RestClient.get("https://api.spotify.com/v1/search?#{query_params.to_query}", header)
+
+    artist = JSON.parse(artist_response.body)
+    artist = artist['artists']['items'][0]
+
+    if artist
+      artist_item.spotify_id = artist['id']
+      artist_item.save!
+      genres = artist['genres']
+
+      if genres
+        genres.each do |genre|
+          gl_genre = Genre.find_or_create_by(name: genre)
+          artist_genre = ArtistGenre.where(genre_id: gl_genre.id)
+                       .where(artist_id: artist_item.id)
+                       .first
+
+          if !artist_genre
+            artist_genre = ArtistGenre.new
+            artist_genre.genre_id = gl_genre.id
+            artist_genre.artist_id = artist_item.id
+            artist_genre.save!
+          end
+        end
+      end
     end
   end
 end
