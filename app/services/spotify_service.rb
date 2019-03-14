@@ -154,7 +154,7 @@ class SpotifyService
   end
 
   def update_playlist
-    user = User.find_by(@spotify_user.user_id)
+    user = User.find_by_id(@spotify_user.user_id)
     spotify_user = SpotifyUser.includes(:artists => :events).where(artists: {events: {metro_area: user.metro_area}}).find_by(id: @spotify_user.id)
     artists = spotify_user.artists
     header = {Authorization: "Bearer #{spotify_user.access_token}"}

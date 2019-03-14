@@ -44,7 +44,7 @@ class SpotifyController < ApplicationController
         spotify_user.expires_at = Time.now.advance(seconds: auth_params['expires_in'])
         spotify_user.save!
 
-        SpotifyUserSetUpJob.perform_later spotify_user
+        SpotifyUserUpdateJob.perform_later spotify_user
 
         sign_in @user
 
