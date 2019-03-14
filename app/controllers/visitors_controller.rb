@@ -2,7 +2,14 @@ class VisitorsController < ApplicationController
     def index
       if user_signed_in?
         if current_user.metro_area
-          render "home"
+          spotify_user = SpotifyUser.includes(:artists => :events).where(artists: {events: {metro_area: current_user.metro_area}}).find_by(user_id: current_user.id)
+          @events = spotify_user.artists
+          # https://open.spotify.com/user/oreolistens/playlist/3tCx3pnNsPKT6PsFKWygKo?si=VeLQcvdzRmupI_lNW415iA
+          playlist = Playlist.find_by(spotify_user_id: spotify_user.id)
+          @playlist_url = "https://open.spotify.com/user/#{spotify_user.spotify_id}/playlist/#{playlist.spotify_id}"
+          # .to_json(:include => :events)
+          # render :json => @events
+          render "users/home"
         else
           render "users/setup"
         end

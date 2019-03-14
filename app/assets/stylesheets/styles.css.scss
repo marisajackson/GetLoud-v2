@@ -3,6 +3,10 @@
   src: asset-data-url("fonts/PermanentMarker-Regular.ttf");
 }
 
+.container {
+  margin-top:50px;
+}
+
 #background {
   background-image: asset-data-url('bg.jpg');
   background-size: cover;
@@ -13,6 +17,10 @@ h1 {
   font-family: 'Permanent Marker';
   font-size: 8rem;
   color: white;
+}
+
+h2 {
+  font-family: 'Permanent Marker';
 }
 
 .login {
