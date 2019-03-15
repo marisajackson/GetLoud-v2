@@ -9,7 +9,9 @@ class VisitorsController < ApplicationController
             @events = spotify_user.artists
             # https://open.spotify.com/user/oreolistens/playlist/3tCx3pnNsPKT6PsFKWygKo?si=VeLQcvdzRmupI_lNW415iA
             playlist = Playlist.find_by(spotify_user_id: spotify_user.id)
-            @playlist_url = "https://open.spotify.com/user/#{spotify_user.spotify_id}/playlist/#{playlist.spotify_id}"
+            if(playlist)
+              @playlist_url = "https://open.spotify.com/user/#{spotify_user.spotify_id}/playlist/#{playlist.spotify_id}"
+            end
           end
           # .to_json(:include => :events)
           # render :json => @events
