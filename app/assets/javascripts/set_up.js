@@ -11,13 +11,14 @@ $(document).ready(function() {
       data: {metroArea: metroArea}
     })
     .done(function() {
-      window.location.replace("http://concertwire.live");
+      window.location.replace("http://www.concertwire.live");
       console.log("success");
     })
     .fail(function() {
       console.log("error");
     })
     .always(function() {
+      window.location.replace("http://www.concertwire.live");
       console.log("complete");
     });
 
