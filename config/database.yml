@@ -32,5 +32,6 @@ test:
   host: localhost
 
 production:
+  adapter: postgresql
   encoding: utf8
   pool: 5
