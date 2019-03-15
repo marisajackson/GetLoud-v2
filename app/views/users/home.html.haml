@@ -1,16 +1,19 @@
 .container.card
   .card-body.text-center
-    %h2 Upcoming Concerts In Your Area
-    %a.btn.btn-success{:href => @playlist_url, :target => "_blank"} Open Playlist
+    - if @playlist_url && @events
+      %h2 Upcoming Concerts In Your Area
+      %a.btn.btn-success{:href => @playlist_url, :target => "_blank"} Open Playlist
 
-    %hr
+      %hr
 
-    - @events.each do |artist|
-      %div
-        %h3 #{artist.name}
-        - artist.events.each do |event|
-          %h4
-            %b #{Time.at(event.date).to_formatted_s(:long) }
-            %span - #{event.venue} - #{event.metro_area} -
-            %a{:href => event.ticket_url} Buy Tickets
-        %hr
+      - @events.each do |artist|
+        %div
+          %h3 #{artist.name}
+          - artist.events.each do |event|
+            %h4
+              %b #{Time.at(event.date).to_formatted_s(:long) }
+              %span - #{event.venue} - #{event.metro_area} -
+              %a{:href => event.ticket_url} Buy Tickets
+          %hr
+    - else
+      %h3 Your personalized concert playlist is being created. Check back soon.
