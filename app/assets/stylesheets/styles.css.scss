@@ -1,3 +1,15 @@
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media only screen and (max-width: 320px) { @content; }
+  }
+  @else if $media == medium-screens {
+    @media only screen and (min-width: 500px) and (max-width: 1024px) { @content; }
+  }
+  @else if $media == wide-screens {
+    @media only screen and (min-width: 1024px) { @content; }
+  }
+}
+
 @font-face {
   font-family: "Permanent Marker";
   src: asset-data-url("fonts/PermanentMarker-Regular.ttf");
@@ -15,8 +27,9 @@
 
 h1 {
   font-family: 'Permanent Marker';
-  font-size: 8rem;
   color: white;
+  @include respond-to(medium-screens) { font-size: 8rem; }
+  @include respond-to(wide-screens) { font-size: 8rem; }
 }
 
 h2 {
@@ -27,6 +40,7 @@ h2 {
   font-family: 'Permanent Marker';
   text-align: center;
   width: 100%;
+  margin: auto;
   margin-top: 50px;
 }
 
