@@ -5,7 +5,7 @@ class UsersController < ApplicationController
       @user.metro_area = params[:metroArea]
       @user.save!
 
-      event = Event.where('metro_area', params[:metroArea]).first
+      event = Event.find_by(metro_area: params[:metroArea])
 
       if(!event)
         EventImportJob.perform_later @user.metro_area
