@@ -1,7 +1,7 @@
 class VisitorsController < ApplicationController
     def index
       if user_signed_in?
-        if current_user.metro_area
+        if current_user.metro_area && current_user.metro_area != ''
           spotify_user = SpotifyUser.includes(:artists => :events).where(artists: {events: {metro_area: current_user.metro_area}}).find_by(user_id: current_user.id)
           @events = nil
           @playlist_url = nil
