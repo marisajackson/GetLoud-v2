@@ -84,7 +84,6 @@ pickle-email-*.html
 *~
 
 # Ignore application configuration
-/config/database.yml
 /config/secrets.yml
 /config/master.key
 
