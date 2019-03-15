@@ -32,7 +32,7 @@ gem 'bootstrap'
 gem 'devise'
 gem 'haml-rails'
 gem 'jquery-rails'
-gem 'mysql2'
+gem 'pg'
 gem 'rest-client'
 
 group :development do

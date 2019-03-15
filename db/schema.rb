@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2019_03_07_131127) do
 
-  create_table "artist_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "artist_genres", force: :cascade do |t|
     t.bigint "genre_id"
     t.bigint "artist_id"
     t.datetime "created_at", null: false
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_131127) do
     t.index ["genre_id"], name: "index_artist_genres_on_genre_id"
   end
 
-  create_table "artists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "artists", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_131127) do
     t.datetime "next_event_at"
   end
 
-  create_table "event_artists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "event_artists", force: :cascade do |t|
     t.bigint "event_id"
     t.bigint "artist_id"
     t.datetime "created_at", null: false
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_131127) do
     t.index ["event_id"], name: "index_event_artists_on_event_id"
   end
 
-  create_table "events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "events", force: :cascade do |t|
     t.string "name"
     t.datetime "date"
     t.string "venue"
@@ -50,13 +50,13 @@ ActiveRecord::Schema.define(version: 2019_03_07_131127) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "genres", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "playlist_tracks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "playlist_tracks", force: :cascade do |t|
     t.bigint "playlist_id"
     t.bigint "artist_id"
     t.string "spotify_track_id"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_131127) do
     t.index ["playlist_id"], name: "index_playlist_tracks_on_playlist_id"
   end
 
-  create_table "playlists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "playlists", force: :cascade do |t|
     t.bigint "spotify_user_id"
     t.string "spotify_id"
     t.datetime "created_at", null: false
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_131127) do
     t.index ["spotify_user_id"], name: "index_playlists_on_spotify_user_id"
   end
 
-  create_table "spotify_user_artists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "spotify_user_artists", force: :cascade do |t|
     t.bigint "spotify_user_id"
     t.bigint "artist_id"
     t.integer "relation_type"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_131127) do
     t.index ["spotify_user_id"], name: "index_spotify_user_artists_on_spotify_user_id"
   end
 
-  create_table "spotify_user_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "spotify_user_genres", force: :cascade do |t|
     t.bigint "spotify_user_id"
     t.bigint "genre_id"
     t.datetime "created_at", null: false
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_131127) do
     t.index ["spotify_user_id"], name: "index_spotify_user_genres_on_spotify_user_id"
   end
 
-  create_table "spotify_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "spotify_users", force: :cascade do |t|
     t.string "spotify_id", default: "", null: false
     t.string "email", default: "", null: false
     t.string "display_name", default: "", null: false
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_131127) do
     t.index ["user_id"], name: "index_spotify_users_on_user_id"
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "metro_area"
     t.string "encrypted_password", default: "", null: false
