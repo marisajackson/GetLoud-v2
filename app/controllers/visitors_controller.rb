@@ -6,15 +6,14 @@ class VisitorsController < ApplicationController
           @events = nil
           @playlist_url = nil
           if spotify_user && spotify_user.artists
-            @events = spotify_user.artists
+            @events = spotify_user.artists.sort_by {|obj| obj.events[0].date}
             # https://open.spotify.com/user/oreolistens/playlist/3tCx3pnNsPKT6PsFKWygKo?si=VeLQcvdzRmupI_lNW415iA
             playlist = Playlist.find_by(spotify_user_id: spotify_user.id)
             if(playlist)
               @playlist_url = "https://open.spotify.com/user/#{spotify_user.spotify_id}/playlist/#{playlist.spotify_id}"
             end
           end
-          # .to_json(:include => :events)
-          # render :json => @events
+
           render "users/home"
         else
           render "users/setup"

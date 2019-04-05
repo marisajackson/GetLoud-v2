@@ -47,7 +47,10 @@ class SpotifyController < ApplicationController
         SpotifyUserUpdateJob.perform_later spotify_user
 
         sign_in @user
-
-        render "users/setup"
+        if(@user.metro_area)
+          redirect_to :controller => 'visitors', :action => 'index'
+        else
+          render "users/setup"
+        end
     end
 end
