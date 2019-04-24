@@ -14,8 +14,8 @@ development:
   reconnect: false
   database: GetLoud-v2_development
   pool: 5
-  username:  <%= Rails.application.credentials.database[:username] %>
-  password:  <%= Rails.application.credentials.database[:password] %>
+  username:  <%= Rails.application.credentials[Rails.env.to_sym][:database][:username] %>
+  password:  <%= Rails.application.credentials[Rails.env.to_sym][:database][:password] %>
   host: localhost
 
 # Warning: The database defined as "test" will be erased and
@@ -27,8 +27,8 @@ test:
   reconnect: false
   database: GetLoud-v2_test
   pool: 5
-  username:  <%= Rails.application.credentials.database[:username] %>
-  password:  <%= Rails.application.credentials.database[:password] %>
+  username:  <%= Rails.application.credentials[Rails.env.to_sym][:database][:username] %>
+  password:  <%= Rails.application.credentials[Rails.env.to_sym][:database][:password] %>
   host: localhost
 
 production:

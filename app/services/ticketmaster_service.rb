@@ -6,10 +6,10 @@ class TicketmasterService
     metro_area = metro_area.split(",")
 
     query_params = {
-        apikey: Rails.application.credentials.ticketmaster[:api_key],
+        apikey: Rails.application.credentials[Rails.env.to_sym][:ticketmaster][:api_key],
         city: metro_area[0],
         stateCode: metro_area[1],
-        segmentId: Rails.application.credentials.ticketmaster[:music_segment_id],
+        segmentId: Rails.application.credentials[Rails.env.to_sym][:ticketmaster][:music_segment_id],
         startDateTime: Time.now.strftime('%FT%TZ'), # '2019-03-01T10:34:00Z',
         endDateTime: (Time.now + 6.months).strftime('%FT%TZ'), #'2019-09-30T10:34:00Z',
         size: 200,
@@ -25,7 +25,7 @@ class TicketmasterService
       tm_query = nil
 
       if event_response['_links']['next']
-        tm_query = "#{event_response['_links']['next']['href']}&apikey=#{Rails.application.credentials.ticketmaster[:api_key]}"
+        tm_query = "#{event_response['_links']['next']['href']}&apikey=#{Rails.application.credentials[Rails.env.to_sym][:ticketmaster][:api_key]}"
       end
 
       events.each do |item|

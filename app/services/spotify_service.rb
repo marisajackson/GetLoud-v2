@@ -3,7 +3,7 @@ class SpotifyService
     @spotify_user = spotify_user
 
     if @spotify_user && (!@spotify_user.expires_at || @spotify_user.expires_at <= Time.now)
-      auth_creds = "#{Rails.application.credentials.spotify[:client_id]}:#{Rails.application.credentials.spotify[:secret]}"
+      auth_creds = "#{Rails.application.credentials[Rails.env.to_sym][:spotify][:client_id]}:#{Rails.application.credentials[Rails.env.to_sym][:spotify][:secret]}"
 
       header = { Authorization: "Basic #{Base64.strict_encode64(auth_creds)}" }
 
@@ -25,10 +25,10 @@ class SpotifyService
   def create_auth_url
     query_params = {
        response_type: 'code',
-       client_id: Rails.application.credentials.spotify[:client_id],
+       client_id: Rails.application.credentials[Rails.env.to_sym][:spotify][:client_id],
        scope: 'user-read-private user-read-email playlist-modify-public playlist-modify-private user-top-read',
-       redirect_uri: Rails.application.credentials.spotify[:redirect_uri],
-       state: Rails.application.credentials.secret_key_base
+       redirect_uri: Rails.application.credentials[Rails.env.to_sym][:spotify][:redirect_uri],
+       state: Rails.application.credentials[Rails.env.to_sym][:secret_key_base]
     }
 
     return "https://accounts.spotify.com/authorize?#{query_params.to_query}"

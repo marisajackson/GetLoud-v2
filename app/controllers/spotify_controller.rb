@@ -1,16 +1,16 @@
 class SpotifyController < ApplicationController
 
     def login
-        if params[:error] || !params[:state] || params[:state] != Rails.application.credentials.secret_key_base
+        if params[:error] || !params[:state] || params[:state] != Rails.application.credentials[Rails.env.to_sym][:secret_key_base]
             return
         end
 
         body = {
             grant_type: 'authorization_code',
             code: params[:code],
-            client_id: Rails.application.credentials.spotify[:client_id],
-            client_secret: Rails.application.credentials.spotify[:secret],
-            redirect_uri: Rails.application.credentials.spotify[:redirect_uri],
+            client_id: Rails.application.credentials[Rails.env.to_sym][:spotify][:client_id],
+            client_secret: Rails.application.credentials[Rails.env.to_sym][:spotify][:secret],
+            redirect_uri: Rails.application.credentials[Rails.env.to_sym][:spotify][:redirect_uri],
         }
 
         auth_response = RestClient.post('https://accounts.spotify.com/api/token', body)
@@ -44,7 +44,7 @@ class SpotifyController < ApplicationController
         spotify_user.expires_at = Time.now.advance(seconds: auth_params['expires_in'])
         spotify_user.save!
 
-        SpotifyUserUpdateJob.perform_later spotify_user
+        # SpotifyUserUpdateJob.perform_later spotify_user
 
         sign_in @user
         if(@user.metro_area)

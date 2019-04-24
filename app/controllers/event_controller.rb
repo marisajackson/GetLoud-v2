@@ -1,9 +1,9 @@
 class EventController < ApplicationController
   def ticketmaster
     query_params = {
-        apikey: Rails.application.credentials.ticketmaster[:api_key],
+        apikey: Rails.application.credentials[Rails.env.to_sym][:ticketmaster][:api_key],
         city: 'Nashville',
-        segmentId: Rails.application.credentials.ticketmaster[:music_segment_id],
+        segmentId: Rails.application.credentials[Rails.env.to_sym][:ticketmaster][:music_segment_id],
         startDateTime: '2019-03-01T10:34:00Z',
         endDateTime: '2019-09-30T10:34:00Z',
         size: 200,
@@ -19,7 +19,7 @@ class EventController < ApplicationController
       tm_query = nil
 
       if event_response['_links']['next']
-        tm_query = "#{event_response['_links']['next']['href']}&apikey=#{Rails.application.credentials.ticketmaster[:api_key]}"
+        tm_query = "#{event_response['_links']['next']['href']}&apikey=#{Rails.application.credentials[Rails.env.to_sym][:ticketmaster][:api_key]}"
       end
 
       events.each do |item|
