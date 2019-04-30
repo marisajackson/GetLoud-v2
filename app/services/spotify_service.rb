@@ -186,6 +186,9 @@ class SpotifyService
     end
 
     all_tracks = []
+    track_ids = Array.new
+    new_artists = []
+
     tracks = nil
 
     artists.each_with_index do |item, index|
@@ -196,19 +199,35 @@ class SpotifyService
         tracks = tracks['tracks']
         tracks.each_with_index do |track, i|
           if(i < 2)
-            playlist_track = PlaylistTrack.new
-            playlist_track.playlist_id = playlist.id
-            playlist_track.spotify_track_id = track['id']
-            playlist_track.artist_id = item.id
-            playlist_track.save!
+            track_ids = track_ids.push(track['id'])
+            playlist_track = PlaylistTrack.where('playlist_id = ?', playlist.id)
+                                          .where('artist_id = ?', item.id)
+                                          .where('spotify_track_id = ?', track['id'])
+                                          .first
+
+            if(!playlist_track)
+              playlist_track = PlaylistTrack.new
+              playlist_track.playlist_id = playlist.id
+              playlist_track.spotify_track_id = track['id']
+              playlist_track.artist_id = item.id
+              playlist_track.save!
+
+              new_artists.push(item.id);
+            end
             all_tracks.push(track['uri'])
           end
         end
     end
 
-    all_tracks = all_tracks.shuffle
+    # Destroys removed tracks
+    PlaylistTrack.where(playlist_id: playlist.id).where.not(spotify_track_id: track_ids).destroy_all
 
+    # Destroys track duplicates
+    PlaylistTrack.where.not(id: PlaylistTrack.group(:spotify_track_id).select("min(id)")).destroy_all
+
+    all_tracks = all_tracks.shuffle.uniq
     all_tracks = all_tracks.each_slice(100).to_a
+
 
     all_tracks.each do |tracklist|
       # POST https://api.spotify.com/v1/playlists/{playlist_id}/tracks
