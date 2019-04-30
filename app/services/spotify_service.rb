@@ -223,7 +223,7 @@ class SpotifyService
     PlaylistTrack.where(playlist_id: playlist.id).where.not(spotify_track_id: track_ids).destroy_all
 
     # Destroys track duplicates
-    PlaylistTrack.where.not(id: PlaylistTrack.group(:spotify_track_id).select("min(id)")).destroy_all
+    PlaylistTrack.where.not(id: PlaylistTrack.where(playlist_id: playlist.id).group(:spotify_track_id).select("min(id)")).destroy_all
 
     all_tracks = all_tracks.shuffle.uniq
     all_tracks = all_tracks.each_slice(100).to_a

@@ -92,3 +92,5 @@ pickle-email-*.html
 
 storage/info.sql
 *todo
+
+app/assets/images/logo.png
