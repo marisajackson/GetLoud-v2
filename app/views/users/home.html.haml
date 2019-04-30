@@ -10,7 +10,8 @@
         %div.row.artist-event-block
           %h3.col-md-12 #{artist.name}
           %div.col-md-3
-            %iframe{:allow => "encrypted-media", :allowtransparency => "true", :frameborder => "0", :height => "80", :src => "https://open.spotify.com/embed/artist/#{artist.spotify_id}", :width => "250"}
+            = image_tag(artist.events[0].image_url)
+            -# %iframe{:allow => "encrypted-media", :allowtransparency => "true", :frameborder => "0", :height => "80", :src => "https://open.spotify.com/embed/artist/#{artist.spotify_id}", :width => "250"}
           %div.col-md-9
             - artist.events.each do |event|
               %h5

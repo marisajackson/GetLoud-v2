@@ -41,6 +41,7 @@ class TicketmasterService
         @event.date = item['dates']['start']['localDate']
         @event.venue = item['_embedded']['venues'][0]['name']
         @event.metro_area = "#{item['_embedded']['venues'][0]['city']['name']}, #{item['_embedded']['venues'][0]['state']['stateCode']}"
+        @event.image_url = item['images'][0]['url']
         @event.ticket_url = item['url']
         @event.event_api = 'ticketmaster'
         @event.event_api_id = item['id']
