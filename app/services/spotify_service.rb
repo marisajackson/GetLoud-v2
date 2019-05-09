@@ -54,50 +54,52 @@ class SpotifyService
       artists = artists['items']
 
       artists.each do |artist|
-        gl_artist = Artist.find_or_create_by(name: artist['name'])
-        gl_artist.spotify_id = artist['id']
-        gl_artist.save!
-        genres = artist['genres']
+        gl_artist = Artist.find_by(name: artist['name'])
+        if gl_artist
+          gl_artist.spotify_id = artist['id']
+          gl_artist.save!
+          genres = artist['genres']
 
-        user_artist = SpotifyUserArtist.where(spotify_user_id: @spotify_user.id)
-                     .where(artist_id: gl_artist.id)
-                     .first
+          user_artist = SpotifyUserArtist.where(spotify_user_id: @spotify_user.id)
+                       .where(artist_id: gl_artist.id)
+                       .first
 
-        if !user_artist
-          user_artist = SpotifyUserArtist.new
-          user_artist.spotify_user_id = @spotify_user.id
-          user_artist.artist_id = gl_artist.id
-        end
-
-        user_artist.relation_type = "direct"
-        user_artist.save!
-
-        if genres
-          genres.each do |genre|
-            gl_genre = Genre.find_or_create_by(name: genre)
-            artist_genre = ArtistGenre.where(genre_id: gl_genre.id)
-                         .where(artist_id: gl_artist.id)
-                         .first
-
-            if !artist_genre
-              artist_genre = ArtistGenre.new
-              artist_genre.genre_id = gl_genre.id
-              artist_genre.artist_id = gl_artist.id
-              artist_genre.save!
-            end
-
-            user_genre = SpotifyUserGenre.where(genre_id: gl_genre.id)
-                         .where(spotify_user_id: @spotify_user.id)
-                         .first
-
-            if !user_genre
-              user_genre = SpotifyUserGenre.new
-              user_genre.genre_id = gl_genre.id
-              user_genre.spotify_user_id = @spotify_user.id
-              user_genre.save!
-            end
+          if !user_artist
+            user_artist = SpotifyUserArtist.new
+            user_artist.spotify_user_id = @spotify_user.id
+            user_artist.artist_id = gl_artist.id
           end
+
+          user_artist.relation_type = "direct"
+          user_artist.save!
         end
+
+        # if genres
+        #   genres.each do |genre|
+        #     gl_genre = Genre.find_or_create_by(name: genre)
+        #     artist_genre = ArtistGenre.where(genre_id: gl_genre.id)
+        #                  .where(artist_id: gl_artist.id)
+        #                  .first
+        #
+        #     if !artist_genre
+        #       artist_genre = ArtistGenre.new
+        #       artist_genre.genre_id = gl_genre.id
+        #       artist_genre.artist_id = gl_artist.id
+        #       artist_genre.save!
+        #     end
+        #
+        #     user_genre = SpotifyUserGenre.where(genre_id: gl_genre.id)
+        #                  .where(spotify_user_id: @spotify_user.id)
+        #                  .first
+        #
+        #     if !user_genre
+        #       user_genre = SpotifyUserGenre.new
+        #       user_genre.genre_id = gl_genre.id
+        #       user_genre.spotify_user_id = @spotify_user.id
+        #       user_genre.save!
+        #     end
+        #   end
+        # end
       end
     end
   end
@@ -117,38 +119,40 @@ class SpotifyService
 
       # TODO this is repeated except the relation type and user genre. that's a problem
       related_artists.each do |related_artist|
-        gl_artist = Artist.find_or_create_by(name: related_artist['name'])
-        gl_artist.spotify_id = related_artist['id']
-        gl_artist.save!
-        genres = related_artist['genres']
+        gl_artist = Artist.find_by(name: related_artist['name'])
+        if gl_artist
+          gl_artist.spotify_id = related_artist['id']
+          gl_artist.save!
+          genres = related_artist['genres']
 
-        user_artist = SpotifyUserArtist.where(spotify_user_id: @spotify_user.id)
-                     .where(artist_id: gl_artist.id)
-                     .first
+          user_artist = SpotifyUserArtist.where(spotify_user_id: @spotify_user.id)
+                       .where(artist_id: gl_artist.id)
+                       .first
 
-        if !user_artist
-          user_artist = SpotifyUserArtist.new
-          user_artist.spotify_user_id = @spotify_user.id
-          user_artist.artist_id = gl_artist.id
-          user_artist.relation_type = "related"
-          user_artist.save!
-        end
-
-        if genres
-          genres.each do |genre|
-            gl_genre = Genre.find_or_create_by(name: genre)
-            artist_genre = ArtistGenre.where(genre_id: gl_genre.id)
-                         .where(artist_id: gl_artist.id)
-                         .first
-
-            if !artist_genre
-              artist_genre = ArtistGenre.new
-              artist_genre.genre_id = gl_genre.id
-              artist_genre.artist_id = gl_artist.id
-              artist_genre.save!
-            end
+          if !user_artist
+            user_artist = SpotifyUserArtist.new
+            user_artist.spotify_user_id = @spotify_user.id
+            user_artist.artist_id = gl_artist.id
+            user_artist.relation_type = "related"
+            user_artist.save!
           end
         end
+
+        # if genres
+        #   genres.each do |genre|
+        #     gl_genre = Genre.find_or_create_by(name: genre)
+        #     artist_genre = ArtistGenre.where(genre_id: gl_genre.id)
+        #                  .where(artist_id: gl_artist.id)
+        #                  .first
+        #
+        #     if !artist_genre
+        #       artist_genre = ArtistGenre.new
+        #       artist_genre.genre_id = gl_genre.id
+        #       artist_genre.artist_id = gl_artist.id
+        #       artist_genre.save!
+        #     end
+        #   end
+        # end
       end
     end
   end
