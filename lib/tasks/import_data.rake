@@ -8,7 +8,7 @@ task :import_data => :environment do
     EventImportJob.perform_later user.metro_area
   end
 
-  artists = Artist.includes(:genres).where(genres: { id: nil }).or(Artist.includes(:genres).where(spotify_id: nil))
+  artists = Artist.includes(:genres).where(spotify_id: nil)
 
   artists.each do |artist|
     SpotifyArtistJob.perform_later artist
