@@ -22,6 +22,8 @@ class VisitorsController < ApplicationController
             @playlist_url = "https://open.spotify.com/user/#{spotify_user.spotify_id}/playlist/#{playlist.spotify_id}"
           end
 
+          # @playlist_url = nil
+
           render "users/home"
         else
           render "users/setup"
@@ -29,5 +31,15 @@ class VisitorsController < ApplicationController
       else
         @spotify_auth_url = SpotifyService.new(SpotifyUser.first).create_auth_url
       end
+    end
+
+    def email
+      @this_week = Event.where(metro_area: current_user.metro_area)
+                    .includes(:artists => :spotify_users)
+                    .where(artists: {spotify_users: {user_id: current_user.id}})
+                    .where("date <= ?", 7.days.from_now)
+                    .order(:date)
+
+      render "users/email"
     end
 end

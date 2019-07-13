@@ -1,0 +1,18 @@
+.container.card
+  .card-body.text-center
+    %a.btn.btn-success{:href => @playlist_url, :target => "_blank"} Open Playlist
+    %h2 This Week
+    %hr
+    - @this_week.each do |event|
+      %div.row.artist-event-block
+        %div.col-md-3
+          - if event.image_url
+            = image_tag(event.image_url)
+          -# %iframe{:allow => "encrypted-media", :allowtransparency => "true", :frameborder => "0", :height => "80", :src => "https://open.spotify.com/embed/artist/#{artist.spotify_id}", :width => "250"}
+        %div.col-md-9
+          %h3 #{event.name}
+          - if event.supporting_artists != nil
+            %h5 with #{event.supporting_artists}
+          %h4 #{Time.at(event.date).to_formatted_s(:long) } - #{event.venue} - #{event.metro_area}
+          %a.btn.btn-success{:href => event.ticket_url} Buy Tickets
+      %hr.col-md-12

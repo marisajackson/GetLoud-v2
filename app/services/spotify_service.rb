@@ -58,7 +58,7 @@ class SpotifyService
         if gl_artist
           gl_artist.spotify_id = artist['id']
           gl_artist.save!
-          genres = artist['genres']
+          # genres = artist['genres']
 
           user_artist = SpotifyUserArtist.where(spotify_user_id: @spotify_user.id)
                        .where(artist_id: gl_artist.id)
@@ -123,7 +123,7 @@ class SpotifyService
         if gl_artist
           gl_artist.spotify_id = related_artist['id']
           gl_artist.save!
-          genres = related_artist['genres']
+          # genres = related_artist['genres']
 
           user_artist = SpotifyUserArtist.where(spotify_user_id: @spotify_user.id)
                        .where(artist_id: gl_artist.id)
@@ -227,7 +227,10 @@ class SpotifyService
     PlaylistTrack.where(playlist_id: playlist.id).where.not(spotify_track_id: track_ids).destroy_all
 
     # Destroys track duplicates
-    PlaylistTrack.where.not(id: PlaylistTrack.where(playlist_id: playlist.id).group(:spotify_track_id).select("min(id)")).destroy_all
+    tracks = PlaylistTrack.where(playlist_id: playlist.id).all
+    tracks.each do |t|
+      t.dedupe(:playlist_id, :spotify_track_id);
+    end
 
     all_tracks = all_tracks.shuffle.uniq
     all_tracks = all_tracks.each_slice(100).to_a

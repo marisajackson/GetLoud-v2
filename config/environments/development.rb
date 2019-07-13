@@ -63,4 +63,14 @@ Rails.application.configure do
   # when problems arise.
   # :debug, :info, :warn, :error, and :fatal
   config.log_level = :warn
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :user_name => Rails.application.credentials[Rails.env.to_sym][:mailer][:username],
+    :password => Rails.application.credentials[Rails.env.to_sym][:mailer][:password],
+    :address => Rails.application.credentials[Rails.env.to_sym][:mailer][:address],
+    :domain => Rails.application.credentials[Rails.env.to_sym][:mailer][:domain],
+    :port => Rails.application.credentials[Rails.env.to_sym][:mailer][:port],
+    :authentication => :cram_md5
+  }
 end
