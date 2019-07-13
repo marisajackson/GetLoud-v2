@@ -229,7 +229,7 @@ class SpotifyService
     # Destroys track duplicates
     tracks = PlaylistTrack.where(playlist_id: playlist.id).all
     tracks.each do |t|
-      t.dedupe(:playlist_id, :spotify_track_id);
+      # t.dedupe(:playlist_id, :spotify_track_id);
     end
 
     all_tracks = all_tracks.shuffle.uniq
