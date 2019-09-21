@@ -1,23 +1,25 @@
 .container.card
-  .card-body.text-center
+  .card-body
     - if @playlist_url && @events
-      %h2 Upcoming Concerts In Your Area
-      %a.btn.btn-success{:href => @playlist_url, :target => "_blank"} Open Playlist
+      .row
+        %h2.col-md-8 Upcoming Concerts In Your Area
+        .col-md-4.text-right
+          %a.btn.btn-success{:href => @playlist_url, :target => "_blank"} Open Playlist
 
-      %hr
-
-      - @events.each do |event|
-        %div.row.artist-event-block
-          %div.col-md-3
-            - if event.image_url
-              = image_tag(event.image_url)
-            -# %iframe{:allow => "encrypted-media", :allowtransparency => "true", :frameborder => "0", :height => "80", :src => "https://open.spotify.com/embed/artist/#{artist.spotify_id}", :width => "250"}
-          %div.col-md-9
-            %h3 #{event.name}
-            - if event.supporting_artists != nil
-              %h5 with #{event.supporting_artists}
-            %h4 #{Time.at(event.date).to_formatted_s(:long) } - #{event.venue} - #{event.metro_area}
-            %a.btn.btn-success{:href => event.ticket_url} Buy Tickets
-        %hr.col-md-12
+      .row
+        - @events.each do |event|
+          .col-md-6
+            %div.row.artist-event-block
+              %div.col-md-3.text-center
+                - if event.image_url
+                  = image_tag(event.image_url)
+                -# %iframe{:allow => "encrypted-media", :allowtransparency => "true", :frameborder => "0", :height => "80", :src => "https://open.spotify.com/embed/artist/#{artist.spotify_id}", :width => "250"}
+                %a.btn.btn-sm.btn-outline-success{:href => event.ticket_url} Buy Tickets
+              %div.col-md-9
+                %h5 #{event.name}
+                - if event.supporting_artists != nil
+                  %h5.featuring with #{event.supporting_artists}
+                %h6 #{Time.at(event.date).to_formatted_s(:long) }
+                %h6 #{event.venue}, #{event.metro_area}
     - else
       %h3 Your personalized concert playlist is being created and will show up in your Spotify playlists when it's completed. Check back soon.

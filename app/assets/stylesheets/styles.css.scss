@@ -15,6 +15,15 @@
   src: asset-data-url("fonts/PermanentMarker-Regular.ttf");
 }
 
+@font-face {
+  font-family: "Source Sans Pro";
+  src: asset-data-url("fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf");
+}
+
+body {
+  font-family: 'Source Sans Pro';
+}
+
 .container {
   margin-top:50px;
 }
@@ -30,10 +39,6 @@ h1 {
   color: white;
   @include respond-to(medium-screens) { font-size: 8rem; }
   @include respond-to(wide-screens) { font-size: 8rem; }
-}
-
-h2 {
-  font-family: 'Permanent Marker';
 }
 
 .login {
@@ -57,4 +62,35 @@ h2 {
 
 .artist-event-block {
   text-align: left;
+}
+
+h2 {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+h6 {
+  color: gray;
+  margin: 3px;
+  font-size: 1rem;
+}
+
+h5 {
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+.featuring {
+    font-size: .9rem;
+    margin-left: 10px;
+}
+
+.artist-event-block {
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+
+.artist-event-block a.btn {
+  margin-top: 10px;
+  font-weight: 0.75rem;
+  font-weight: 500;
 }
