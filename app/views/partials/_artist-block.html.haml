@@ -1,0 +1,16 @@
+%div.row.artist-event-block
+  %div.col-md-3.text-center
+    - if event.image_url
+      = image_tag(event.image_url)
+    -# %iframe{:allow => "encrypted-media", :allowtransparency => "true", :frameborder => "0", :height => "80", :src => "https://open.spotify.com/embed/artist/#{artist.spotify_id}", :width => "250"}
+  %div.col-md-9
+    %h5 #{event.name}
+    %h5.featuring
+      - if event.supporting_artists != nil
+        %span with #{event.supporting_artists}
+    .event-info
+      %h6 #{Time.at(event.date).strftime("%A, %B %e, %Y") }
+      %h6 #{event.venue}, #{event.metro_area}
+    .event-actions
+      %a.btn.btn-sm.btn-outline-success{:href => event.ticket_url} Buy Tickets
+  -# .col-md-12.text-right

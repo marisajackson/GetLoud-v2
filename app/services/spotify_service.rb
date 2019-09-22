@@ -73,33 +73,6 @@ class SpotifyService
           user_artist.relation_type = "direct"
           user_artist.save!
         end
-
-        # if genres
-        #   genres.each do |genre|
-        #     gl_genre = Genre.find_or_create_by(name: genre)
-        #     artist_genre = ArtistGenre.where(genre_id: gl_genre.id)
-        #                  .where(artist_id: gl_artist.id)
-        #                  .first
-        #
-        #     if !artist_genre
-        #       artist_genre = ArtistGenre.new
-        #       artist_genre.genre_id = gl_genre.id
-        #       artist_genre.artist_id = gl_artist.id
-        #       artist_genre.save!
-        #     end
-        #
-        #     user_genre = SpotifyUserGenre.where(genre_id: gl_genre.id)
-        #                  .where(spotify_user_id: @spotify_user.id)
-        #                  .first
-        #
-        #     if !user_genre
-        #       user_genre = SpotifyUserGenre.new
-        #       user_genre.genre_id = gl_genre.id
-        #       user_genre.spotify_user_id = @spotify_user.id
-        #       user_genre.save!
-        #     end
-        #   end
-        # end
       end
     end
   end
@@ -137,22 +110,6 @@ class SpotifyService
             user_artist.save!
           end
         end
-
-        # if genres
-        #   genres.each do |genre|
-        #     gl_genre = Genre.find_or_create_by(name: genre)
-        #     artist_genre = ArtistGenre.where(genre_id: gl_genre.id)
-        #                  .where(artist_id: gl_artist.id)
-        #                  .first
-        #
-        #     if !artist_genre
-        #       artist_genre = ArtistGenre.new
-        #       artist_genre.genre_id = gl_genre.id
-        #       artist_genre.artist_id = gl_artist.id
-        #       artist_genre.save!
-        #     end
-        #   end
-        # end
       end
     end
   end

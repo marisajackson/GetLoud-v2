@@ -1,30 +1,3 @@
-:css
-  h2 {
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    width: 60%;
-  }
-
-  h6 {
-    color: gray;
-    margin: 3px;
-    font-size: 1rem;
-  }
-
-  h5 {
-    font-size: 1.2rem;
-  }
-
-  .artist-event-block {
-    margin-bottom: 30px;
-    margin-top: 10px;
-  }
-
-  .artist-event-block a.btn {
-    margin-top: 10px;
-    font-weight: 0.75rem;
-    font-weight: 500;
-  }
-
 .container.card
   .card-body
     -# %a.btn.btn-success.pull-right{:href => @playlist_url, :target => "_blank"} Open Playlist
@@ -33,16 +6,19 @@
     .row
       - @this_week.each do |event|
         .col-md-6
-          %div.row.artist-event-block
-            %div.col-md-3.text-center
-              - if event.image_url
-                = image_tag(event.image_url)
-              -# %iframe{:allow => "encrypted-media", :allowtransparency => "true", :frameborder => "0", :height => "80", :src => "https://open.spotify.com/embed/artist/#{artist.spotify_id}", :width => "250"}
-              %a.btn.btn-sm.btn-outline-success{:href => event.ticket_url} Buy Tickets
-            %div.col-md-9
-              %h5 #{event.name}
-              - if event.supporting_artists != nil
-                %h5.featuring with #{event.supporting_artists}
-              %h6 #{Time.at(event.date).to_formatted_s(:long) }
-              %h6 #{event.venue}, #{event.metro_area}
-        -# %hr.col-md-12
+          = render 'partials/artist-block', :event => event
+    .row
+      %h2.col-md-8 Recently Added
+    .row
+      - @new_additions.each do |event|
+        .col-md-6
+          = render 'partials/artist-block', :event => event
+
+    .row
+      %h2.col-md-8
+        %span Popular Concerts in
+        %span= @city
+    .row
+      - @new_additions.each do |event|
+        .col-md-6
+          = render 'partials/artist-block', :event => event

@@ -90,7 +90,15 @@ h5 {
 }
 
 .artist-event-block a.btn {
-  margin-top: 10px;
-  font-weight: 0.75rem;
+  font-size: 0.75rem;
   font-weight: 500;
+}
+
+.event-info {
+  float: left;
+}
+
+.event-actions {
+    float: right;
+    margin-top: 15px;
 }

@@ -9,17 +9,6 @@
       .row
         - @events.each do |event|
           .col-md-6
-            %div.row.artist-event-block
-              %div.col-md-3.text-center
-                - if event.image_url
-                  = image_tag(event.image_url)
-                -# %iframe{:allow => "encrypted-media", :allowtransparency => "true", :frameborder => "0", :height => "80", :src => "https://open.spotify.com/embed/artist/#{artist.spotify_id}", :width => "250"}
-                %a.btn.btn-sm.btn-outline-success{:href => event.ticket_url} Buy Tickets
-              %div.col-md-9
-                %h5 #{event.name}
-                - if event.supporting_artists != nil
-                  %h5.featuring with #{event.supporting_artists}
-                %h6 #{Time.at(event.date).to_formatted_s(:long) }
-                %h6 #{event.venue}, #{event.metro_area}
+            = render 'partials/artist-block', :event => event
     - else
       %h3 Your personalized concert playlist is being created and will show up in your Spotify playlists when it's completed. Check back soon.
