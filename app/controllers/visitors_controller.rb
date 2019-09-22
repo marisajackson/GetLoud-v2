@@ -34,12 +34,33 @@ class VisitorsController < ApplicationController
     end
 
     def email
+      @city = current_user.metro_area;
       @this_week = Event.where(metro_area: current_user.metro_area)
                     .includes(:artists => :spotify_users)
                     .where(artists: {spotify_users: {user_id: current_user.id}})
                     .where("date <= ?", 7.days.from_now)
                     .order(:date)
 
-      render "users/email"
+      @new_additions = Event.where(metro_area: current_user.metro_area)
+                    .includes(:artists => :spotify_users)
+                    .includes(:artists => :playlist_tracks)
+                    .where(artists: {spotify_users: {user_id: current_user.id}})
+                    .where("date >= ?", 7.days.from_now)
+                    .order('playlist_tracks.created_at')
+                    .limit(10)
+
+      @popular = Event.select("events.*, count(playlist_tracks.*) as count")
+                    .joins(:artists => :playlist_tracks)
+                    .group('events.id, playlist_tracks.artist_id')
+                    .order('COUNT(playlist_tracks.artist_id) DESC')
+                    # .where(metro_area: current_user.metro_area)
+                    # .joins(:artists => :spotify_users)
+                    # .where("date >= ?", 7.days.from_now)
+                    # .first()
+                    # .limit(10)
+                    # .group('playlist_tracsst_track.artist_id) > ?", 3)
+
+      # render "users/email"
+      render :json => @popular
     end
 end
