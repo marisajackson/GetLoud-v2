@@ -1,5 +1,7 @@
 .container.card
   .card-body
+    %h1 ConcertWire
+
     -# %a.btn.btn-success.pull-right{:href => @playlist_url, :target => "_blank"} Open Playlist
     .row
       %h2.col-md-8 This Week
@@ -19,6 +21,6 @@
         %span Popular Concerts in
         %span= @city
     .row
-      - @new_additions.each do |event|
+      - @popular.each do |event|
         .col-md-6
           = render 'partials/artist-block', :event => event

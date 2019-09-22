@@ -54,14 +54,8 @@ class VisitorsController < ApplicationController
                     .where(metro_area: current_user.metro_area)
                     .group('events.id, playlist_tracks.artist_id')
                     .order('COUNT(playlist_tracks.artist_id) DESC')
-                    # .where(metro_area: current_user.metro_area)
-                    # .joins(:artists => :spotify_users)
-                    # .where("date >= ?", 7.days.from_now)
-                    # .first()
-                    # .limit(10)
-                    # .group('playlist_tracsst_track.artist_id) > ?", 3)
+                    .limit(10)
 
-      # render "users/email"
-      render :json => @popular
+      render "users/email"
     end
 end
