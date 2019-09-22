@@ -51,6 +51,7 @@ class VisitorsController < ApplicationController
 
       @popular = Event.select("events.*, count(playlist_tracks.*) as count")
                     .joins(:artists => :playlist_tracks)
+                    .where(metro_area: current_user.metro_area)
                     .group('events.id, playlist_tracks.artist_id')
                     .order('COUNT(playlist_tracks.artist_id) DESC')
                     # .where(metro_area: current_user.metro_area)
