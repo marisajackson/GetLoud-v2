@@ -1,8 +1,7 @@
 %div.row.artist-event-block
-  %div.col-md-3.text-center.d-md-block.d-none
+  %div.col-md-3.col-sm-12.text-center.d-md-block.d-none
     - if event.image_url
       = image_tag(event.image_url)
-    -# %iframe{:allow => "encrypted-media", :allowtransparency => "true", :frameborder => "0", :height => "80", :src => "https://open.spotify.com/embed/artist/#{artist.spotify_id}", :width => "250"}
   %div.col-md-9
     %h5 #{event.name}
     %h5.featuring

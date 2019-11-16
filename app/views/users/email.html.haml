@@ -1,26 +1,27 @@
-.container.card
+#email.container.card
   .card-body
-    %h1 ConcertWire
+    #email-logo.text-center
+      %img{:src => asset_url('logo.png')}
 
     -# %a.btn.btn-success.pull-right{:href => @playlist_url, :target => "_blank"} Open Playlist
     .row
-      %h2.col-md-8 This Week
+      %h2.col-md-12 This Week
     .row
       - @this_week.each do |event|
-        .col-md-6
+        .col-md-12
           = render 'partials/artist-block', :event => event
     .row
-      %h2.col-md-8 Recently Added
+      %h2.col-md-12 Recently Added
     .row
       - @new_additions.each do |event|
-        .col-md-6
+        .col-md-12
           = render 'partials/artist-block', :event => event
 
     .row
-      %h2.col-md-8
+      %h2.col-md-12
         %span Popular Concerts in
         %span= @city
     .row
       - @popular.each do |event|
-        .col-md-6
+        .col-md-12
           = render 'partials/artist-block', :event => event
