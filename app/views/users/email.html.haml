@@ -1,9 +1,10 @@
 #email.container.card
   .card-body
-    #email-logo.text-center
-      %img{:src => asset_url('logo.png')}
-
-    -# %a.btn.btn-success.pull-right{:href => @playlist_url, :target => "_blank"} Open Playlist
+    #email-header.row
+      #email-logo.col-md-8
+        %img{:src => asset_url('logo.png')}
+      .col-md-4.text-center
+        %a.btn.btn-success.pull-right{:href => @playlist_url, :target => "_blank"} Listen on Spotify
     .row
       %h2.col-md-12 This Week
     .row

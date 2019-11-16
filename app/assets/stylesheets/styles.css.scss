@@ -96,7 +96,13 @@ h5 {
 }
 
 #email {
-  max-width: 600px;  
+  max-width: 600px;
+  #email-header {
+    #email-logo {
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 767.98px) {
