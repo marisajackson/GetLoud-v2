@@ -10,6 +10,7 @@ task :import_data => :environment do
   end
 
   Event.where.not(id: Event.group(:event_api_id).select("min(id)")).destroy_all
+  Event.where("ticket_url LIKE :tickets_now", tickets_now: "%'ticketsnow'%").destroy_all
 
   Artist.where.not(id: Artist.joins(:events).uniq).destroy_all
   artists = Artist.includes(:genres).where(spotify_id: nil)
