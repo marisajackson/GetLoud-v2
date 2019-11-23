@@ -1,0 +1,63 @@
+@media screen {
+  @font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v13/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7lujVj9w.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+}
+
+body {
+  font-family: 'Source Sans Pro';
+  background-color: black;
+}
+
+.artist-event-block {
+  text-align: left;
+}
+
+h2 {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+h6 {
+  color: gray;
+  margin: 3px;
+  font-size: 1rem;
+}
+
+h5 {
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+.featuring {
+    font-size: .9rem;
+    margin-left: 10px;
+}
+
+.artist-event-block {
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+
+.artist-event-block a.btn {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+#email {
+  max-width: 600px;
+  #email-header {
+    #email-logo {
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    margin-bottom: 10px;
+  }
+}
+
+img {
+  width: 100%;
+}

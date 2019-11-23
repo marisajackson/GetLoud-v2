@@ -35,6 +35,7 @@ gem 'haml-rails'
 gem 'jquery-rails'
 gem 'pg'
 gem 'rest-client'
+gem 'bootstrap-email'
 
 group :development do
   gem 'better_errors'

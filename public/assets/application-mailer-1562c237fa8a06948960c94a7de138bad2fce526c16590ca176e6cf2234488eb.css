@@ -1,0 +1,77 @@
+@media screen {
+  @font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local("Source Sans Pro Regular"), local("SourceSansPro-Regular"), url(https://fonts.gstatic.com/s/sourcesanspro/v13/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7lujVj9w.woff2) format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+}
+
+/* line 12, app/assets/stylesheets/application-mailer.scss */
+body {
+  font-family: 'Source Sans Pro';
+  background-color: black;
+}
+
+/* line 17, app/assets/stylesheets/application-mailer.scss */
+.artist-event-block {
+  text-align: left;
+}
+
+/* line 21, app/assets/stylesheets/application-mailer.scss */
+h2 {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* line 25, app/assets/stylesheets/application-mailer.scss */
+h6 {
+  color: gray;
+  margin: 3px;
+  font-size: 1rem;
+}
+
+/* line 31, app/assets/stylesheets/application-mailer.scss */
+h5 {
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+/* line 36, app/assets/stylesheets/application-mailer.scss */
+.featuring {
+  font-size: .9rem;
+  margin-left: 10px;
+}
+
+/* line 41, app/assets/stylesheets/application-mailer.scss */
+.artist-event-block {
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+
+/* line 46, app/assets/stylesheets/application-mailer.scss */
+.artist-event-block a.btn {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* line 51, app/assets/stylesheets/application-mailer.scss */
+#email {
+  max-width: 600px;
+}
+
+/* line 53, app/assets/stylesheets/application-mailer.scss */
+#email #email-header {
+  margin-bottom: 10px;
+}
+
+/* line 54, app/assets/stylesheets/application-mailer.scss */
+#email #email-header #email-logo {
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* line 61, app/assets/stylesheets/application-mailer.scss */
+img {
+  width: 100%;
+}

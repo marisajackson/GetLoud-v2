@@ -34,6 +34,8 @@ class VisitorsController < ApplicationController
     end
 
     def email
+      UserMailer.weekly_update(current_user, current_user.spotify_user).deliver
+
       @city = current_user.metro_area;
       @this_week = Event.where(metro_area: current_user.metro_area)
                     .includes(:artists => :spotify_users)
@@ -53,7 +55,7 @@ class VisitorsController < ApplicationController
                     .joins(:artists => :playlist_tracks)
                     .where(metro_area: current_user.metro_area)
                     .group('events.id, playlist_tracks.artist_id')
-                    .order('COUNT(playlist_tracks.artist_id) DESC')
+                    .order(Arel.sql('COUNT(playlist_tracks.artist_id) DESC'))
                     .limit(10)
 
       render "users/email"
