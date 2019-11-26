@@ -123,19 +123,23 @@
       .col-4
         %a.playlist-url.btn.btn-success.pull-right{:href => @playlist_url, :target => "_blank"} Listen on Spotify
 
-    .row
-      %h2 This Week
-    - @this_week.each do |event|
-      = render 'partials/artist-block', :event => event
+    - if @this_week.length > 0
+      .row
+        %h2 This Week
+      - @this_week.each do |event|
+        = render 'partials/artist-block', :event => event
 
-    .row
-      %h2 Recently Added
-    - @new_additions.each do |event|
-      = render 'partials/artist-block', :event => event
+    - if @new_additions.length > 0
+      .row
+        %h2 Recently Added
+      - @new_additions.each do |event|
+        = render 'partials/artist-block', :event => event
 
-    .row
-      %h2
-        %span Popular Concerts in
-        %span= @city
-    - @popular.each do |event|
-      = render 'partials/artist-block', :event => event
+    - if @popular.length > 0
+      .row
+        %h2
+          %span Popular Concerts in
+          %span= @city
+          %span= @popular.length
+      - @popular.each do |event|
+        = render 'partials/artist-block', :event => event
