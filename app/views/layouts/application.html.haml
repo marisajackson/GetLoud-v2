@@ -6,6 +6,7 @@
     %meta{:name => "description", :content => "#{content_for?(:description) ? yield(:description) : 'ConcertWire'}"}
     = stylesheet_link_tag 'application', media: 'all'
     = javascript_include_tag 'application'
+    = favicon_link_tag asset_path('favicon_io/favicon.ico')
     = csrf_meta_tags
   %body#background
     = yield
