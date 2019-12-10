@@ -12,4 +12,5 @@
       %h6 #{event.venue}, #{event.metro_area}
     .event-actions
       %a.btn.btn-sm.btn-outline-success{:href => event.ticket_url} Buy Tickets
-  -# .col-12.text-right
+  .col-12.full-size-ticket-url
+    %a.btn.btn-sm.btn-outline-success{:href => event.ticket_url} Buy Tickets

@@ -1,7 +1,7 @@
 class UserMailer < ApplicationMailer
-  def weekly_update(user, spotify_user)
+  def weekly_update(user, spotify_user, force = false)
     # sendEmails  == 1
-    if !user.send_emails
+    if !user.send_emails && !force
       return
     end
 
@@ -11,8 +11,10 @@ class UserMailer < ApplicationMailer
     end
 
     # no email sent in the last 6 days
-    recent_email = EmailHistory.where("sent_at >= ?", 6.days.ago).first()
-    if recent_email
+    recent_email = EmailHistory.where("sent_at >= ?", 6.days.ago)
+                                .where(user_id: user.id)
+                                .first()
+    if recent_email && !force
       return
     end
 
@@ -29,14 +31,39 @@ class UserMailer < ApplicationMailer
                   .includes(:artists => :spotify_users)
                   .includes(:artists => :playlist_tracks)
                   .where(artists: {spotify_users: {user_id: user.id}})
-                  .where("date >= ?", 7.days.from_now)
+                  .where('events.created_at <= ?', 2.days.ago)
                   .order('playlist_tracks.created_at')
-                  .limit(10)
+                  .limit(6)
 
     # only if this_week or new_additions
-    if(@this_week.length == 0 && @new_additions.length == 0)
+    if(@this_week.length == 0 && @new_additions.length == 0) && !force
       return
     end
+
+    @this_week.each do |event|
+      event.supporting_artists = nil
+      supporting_artists = []
+      event.artists.each do |artist|
+        if !event.name.include? artist.name
+          supporting_artists.push(artist.name)
+          event.supporting_artists = supporting_artists.join(", ")
+        end
+      end
+    end
+
+    @new_additions.each do |event|
+      event.supporting_artists = nil
+      supporting_artists = []
+      event.artists.each do |artist|
+        eventName = event.name.downcase
+        artistName = artist.name.downcase
+        if !eventName.include? artistName
+          supporting_artists.push(artist.name)
+          event.supporting_artists = supporting_artists.join(", ")
+        end
+      end
+    end
+
 
     @popular = Event.select("events.*, count(playlist_tracks.*) as count")
                   .joins(:artists => :playlist_tracks)
@@ -44,7 +71,7 @@ class UserMailer < ApplicationMailer
                   .group('events.id, playlist_tracks.artist_id')
                   .order(Arel.sql('COUNT(playlist_tracks.artist_id) DESC'))
                   .having('COUNT(playlist_tracks.artist_id) > 5')
-                  .limit(10)
+                  .limit(6)
 
     email_history = EmailHistory.new
     email_history.user_id = user.id
@@ -57,6 +84,39 @@ class UserMailer < ApplicationMailer
     }
     email_history.save!
 
-    mail(to: 'mhljackson@gmail.com', subject: 'Sample Email')
+    artistNames = [];
+    if(@new_additions)
+      subject = 'Just Announced: '
+      artists = Artist.includes(:spotify_users)
+              .includes(:events)
+              .includes(:playlist_tracks => :playlist)
+              .where('events.created_at <= ?', 2.days.ago)
+              .where(playlist_tracks: {playlists: {spotify_user_id: spotify_user.id}})
+              .where(spotify_users: {user_id: user.id})
+              .order('playlist_tracks.created_at desc')
+              .limit(3)
+
+      artists.each_with_index do |artist, i|
+        artistNames.push(artist.name);
+      end
+    else
+      subject = 'This Week: '
+
+      artists = Artist.includes(:spotify_users)
+              .includes(:events)
+              .where("date <= ?", 7.days.from_now)
+              .where(spotify_users: {user_id: current_user.id})
+              .limit(3)
+
+      artists.each_with_index do |artist, i|
+        artistNames.push(artist.name);
+      end
+    end
+
+    artistNames = artistNames.join(', ');
+
+    subject = subject + artistNames;
+
+    mail(to: user.email, subject: subject)
   end
 end

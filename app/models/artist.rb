@@ -1,6 +1,7 @@
 class Artist < ApplicationRecord
   has_many :event_artists
   has_many :events, -> { where("date > ?", Time.now) }, through: :event_artists
+  has_many :this_week_events, -> { where("date > ?", Time.now) }, through: :event_artists
 
   has_many :playlist_tracks
 

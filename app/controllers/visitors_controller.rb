@@ -34,30 +34,41 @@ class VisitorsController < ApplicationController
     end
 
     def email
-      UserMailer.weekly_update(current_user, current_user.spotify_user).deliver
+      UserMailer.weekly_update(current_user, current_user.spotify_user, true).deliver
 
-      @city = current_user.metro_area;
-      @this_week = Event.where(metro_area: current_user.metro_area)
-                    .includes(:artists => :spotify_users)
-                    .where(artists: {spotify_users: {user_id: current_user.id}})
-                    .where("date <= ?", 7.days.from_now)
-                    .order(:date)
+      # artists = Artist.includes(:spotify_users)
+      #         .includes(:events)
+      #         .includes(:playlist_tracks => :playlist)
+      #         .where('events.created_at >= ?', 2.days.ago)
+      #         .where(playlist_tracks: {playlists: {spotify_user_id: current_user.spotify_user.id}})
+      #         .where(spotify_users: {user_id: current_user.id})
+      #         .order('playlist_tracks.created_at desc')
+      #         .limit(3)
+      #
+      # render :json => artists
 
-      @new_additions = Event.where(metro_area: current_user.metro_area)
-                    .includes(:artists => :spotify_users)
-                    .includes(:artists => :playlist_tracks)
-                    .where(artists: {spotify_users: {user_id: current_user.id}})
-                    .where("date >= ?", 7.days.from_now)
-                    .order('playlist_tracks.created_at')
-                    .limit(10)
-
-      @popular = Event.select("events.*, count(playlist_tracks.*) as count")
-                    .joins(:artists => :playlist_tracks)
-                    .where(metro_area: current_user.metro_area)
-                    .group('events.id, playlist_tracks.artist_id')
-                    .order(Arel.sql('COUNT(playlist_tracks.artist_id) DESC'))
-                    .limit(10)
-
-      render "users/email"
+      # @city = current_user.metro_area;
+      # @this_week = Event.where(metro_area: current_user.metro_area)
+      #               .includes(:artists => :spotify_users)
+      #               .where(artists: {spotify_users: {user_id: current_user.id}})
+      #               .where("date <= ?", 7.days.from_now)
+      #               .order(:date)
+      #
+      # @new_additions = Event.where(metro_area: current_user.metro_area)
+      #               .includes(:artists => :spotify_users)
+      #               .includes(:artists => :playlist_tracks)
+      #               .where(artists: {spotify_users: {user_id: current_user.id}})
+      #               .where("date >= ?", 7.days.from_now)
+      #               .order('playlist_tracks.created_at')
+      #               .limit(10)
+      #
+      # @popular = Event.select("events.*, count(playlist_tracks.*) as count")
+      #               .joins(:artists => :playlist_tracks)
+      #               .where(metro_area: current_user.metro_area)
+      #               .group('events.id, playlist_tracks.artist_id')
+      #               .order(Arel.sql('COUNT(playlist_tracks.artist_id) DESC'))
+      #               .limit(10)
+      #
+      # render "users/email"
     end
 end
