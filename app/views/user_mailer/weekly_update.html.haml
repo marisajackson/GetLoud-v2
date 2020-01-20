@@ -199,6 +199,5 @@
         %h2
           %span Popular Concerts in
           %span= @city
-          %span= @popular.length
       - @popular.each do |event|
         = render 'partials/artist-block', :event => event

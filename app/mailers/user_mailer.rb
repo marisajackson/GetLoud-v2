@@ -28,10 +28,10 @@ class UserMailer < ApplicationMailer
 
 
     @new_additions = Event.where(metro_area: user.metro_area)
-                  .includes(:artists => :spotify_users)
+                  .includes(:artists => :spotify_user_artists)
                   .includes(:artists => :playlist_tracks)
-                  .where(artists: {spotify_users: {user_id: user.id}})
-                  .where('events.created_at <= ?', 2.days.ago)
+                  .where(spotify_user_artists: {spotify_user_id: spotify_user.id})
+                  .where('events.created_at <= ?', 6.days.ago)
                   .order('playlist_tracks.created_at')
                   .limit(6)
 
@@ -87,19 +87,12 @@ class UserMailer < ApplicationMailer
     artistNames = [];
     if(@new_additions)
       subject = 'Just Announced: '
-      artists = Artist.select('artists.name')
-              .joins(:spotify_users)
-              .joins(:events)
-              .joins(:playlist_tracks => :playlist)
-              .where(events: {metro_area: user.metro_area})
-              .where('events.created_at <= ?', 2.days.ago)
-              .where(playlist_tracks: {playlists: {spotify_user_id: spotify_user.id}})
-              .where(spotify_users: {user_id: user.id})
-              .group('artists.name')
-              .limit(3)
-
-      artists.each_with_index do |artist, i|
-        artistNames.push(artist.name);
+      @new_additions.each do |event|
+        event.artists.each do |artist|
+          if(artist.spotify_user_artists.relation_type == 0)
+            artistNames.push(artist.name);
+          end
+        end
       end
     else
       subject = 'This Week: '
