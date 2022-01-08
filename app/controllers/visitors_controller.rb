@@ -34,7 +34,21 @@ class VisitorsController < ApplicationController
     end
 
     def email
-      UserMailer.weekly_update(current_user, current_user.spotify_user, true).deliver
+      user = current_user
+      spotify_user = current_user.spotify_user
+      artists = Event.where(metro_area: user.metro_area)
+                    .includes(:artists => :spotify_user_artists)
+                    .includes(:artists => :playlist_tracks)
+                    .where(spotify_user_artists: {spotify_user_id: spotify_user.id})
+                    .where('events.created_at <= ?', 6.days.ago)
+                    .order('playlist_tracks.created_at')
+                    .limit(6)
+              # .order('playlist_tracks.created_at desc')
+              # .distinct()
+
+    render :json => {sql: artists.to_sql, artists: artists}
+
+      # UserMailer.weekly_update(current_user, current_user.spotify_user, true).deliver
 
       # artists = Artist.includes(:spotify_users)
       #         .includes(:events)

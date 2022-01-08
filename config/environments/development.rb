@@ -69,11 +69,13 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.smtp_settings = {
-    :user_name => Rails.application.credentials[Rails.env.to_sym][:mailer][:username],
-    :password => Rails.application.credentials[Rails.env.to_sym][:mailer][:password],
-    :address => Rails.application.credentials[Rails.env.to_sym][:mailer][:address],
-    :domain => Rails.application.credentials[Rails.env.to_sym][:mailer][:domain],
-    :port => Rails.application.credentials[Rails.env.to_sym][:mailer][:port],
-    :authentication => :cram_md5
+    :user_name => Rails.application.credentials[Rails.env.to_sym][:mailer][:mailgun][:username],
+    :password => Rails.application.credentials[Rails.env.to_sym][:mailer][:mailgun][:password],
+    :address => Rails.application.credentials[Rails.env.to_sym][:mailer][:mailgun][:address],
+    :domain => 'sandbox811c5f184bdf4d998a010de849e98182.mailgun.org',
+    # :domain => Rails.application.credentials[Rails.env.to_sym][:mailer][:mailgun][:domain],
+    :port => Rails.application.credentials[Rails.env.to_sym][:mailer][:mailgun][:port],
+    :authentication => :plain
+    # :authentication => :cram_md5
   }
 end
