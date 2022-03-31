@@ -1,14 +1,18 @@
-.container.card
-  .card-body
-    - if @playlist_url && @events
-      .row
-        %h2.col-md-8 Upcoming Concerts In Your Area
-        .col-md-4.text-right
-          %a.btn.btn-success{:href => @playlist_url, :target => "_blank"} Open Playlist
+.container.col-md-6.offset-3.col-sm-12
+  .card.mb-1
+    .card-body
+      - if @playlist_url && @events
+        .row
+          %h2.col-md-8 Upcoming Concerts In Your Area
+          .col-md-4.text-right
+            %a.btn.btn-success{:href => @playlist_url, :target => "_blank"} Open Spotify
+      - else
+        %h3 Your personalized concert playlist is being created and will show up in your Spotify playlists when it's completed. Check back soon.
 
-      .row
-        - @events.each do |event|
-          .col-md-6
+
+  - @events.each do |event|
+    .row.mb-1
+      .col-md-12
+        .card
+          .card-body
             = render 'partials/artist-block', :event => event
-    - else
-      %h3 Your personalized concert playlist is being created and will show up in your Spotify playlists when it's completed. Check back soon.

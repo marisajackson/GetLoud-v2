@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   put 'users/metro-area', to: 'users#set_metro_area'
 
   get 'admin/mailer/weekly_update', to: 'admin/mailer#weekly_update'
+
+  get 'logout', to: 'visitors#logout'
 end

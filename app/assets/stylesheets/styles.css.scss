@@ -36,14 +36,14 @@ body {
 }
 
 h1 {
-  font-family: 'Permanent Marker';
+  // font-family: 'Permanent Marker';
   color: white;
   @include respond-to(medium-screens) { font-size: 8rem; }
   @include respond-to(wide-screens) { font-size: 8rem; }
 }
 
 .login {
-  font-family: 'Permanent Marker';
+  // font-family: 'Permanent Marker';
   text-align: center;
   width: 100%;
   margin: auto;
@@ -57,8 +57,17 @@ h1 {
   padding-left: 15px;
   font-size: 30px;
   border-radius: 40px;
-  background-color: #1DB954;
+  background-color: #0290ff;
   color: white;
+}
+
+.btn-success {
+  background-color: #0290ff;
+}
+
+.btn-outline-success{
+  color: #0290ff;
+  border-color: #0290ff;
 }
 
 .artist-event-block {

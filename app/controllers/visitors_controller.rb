@@ -33,6 +33,12 @@ class VisitorsController < ApplicationController
       end
     end
 
+    def logout
+      sign_out(current_user)
+
+      render 'index'
+    end
+
     def email
       user = current_user
       spotify_user = current_user.spotify_user
@@ -46,7 +52,7 @@ class VisitorsController < ApplicationController
               # .order('playlist_tracks.created_at desc')
               # .distinct()
 
-    render :json => {sql: artists.to_sql, artists: artists}
+      render :json => {sql: artists.to_sql, artists: artists}
 
       # UserMailer.weekly_update(current_user, current_user.spotify_user, true).deliver
 
