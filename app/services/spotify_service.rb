@@ -197,6 +197,8 @@ class SpotifyService
       # POST https://api.spotify.com/v1/playlists/{playlist_id}/tracks
       playlist_track_params = { uris: tracklist }
 
+      
+
       RestClient.post("https://api.spotify.com/v1/playlists/#{playlist.spotify_id}/tracks", playlist_track_params.to_json, header)
     end
   end

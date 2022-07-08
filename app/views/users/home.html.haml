@@ -4,7 +4,7 @@
       - if @playlist_url && @events
         .row
           %h2.col-md-8 Upcoming Concerts In Your Area
-          .col-md-4.text-right
+          .col-md-4.text-end
             %a.btn.btn-success{:href => @playlist_url, :target => "_blank"} Open Spotify
       - else
         %h3 Your personalized concert playlist is being created and will show up in your Spotify playlists when it's completed. Check back soon.

@@ -64,12 +64,13 @@ h1 {
 .btn-success, .btn-outline-success {
   background-color: #0290ff;
   border-color: #0290ff;
+  color: white;
+  &:hover {
+    background-color: #087fdd;
+    border-color: #087fdd;
+  }
 }
 
-.btn-success:hover {
-  color: #087fdd;
-  border-color: #087fdd;
-}
 
 .artist-event-block {
   text-align: left;
