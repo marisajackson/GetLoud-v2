@@ -1,23 +1,27 @@
 @mixin respond-to($media) {
   @if $media == handhelds {
-    @media only screen and (max-width: 320px) { @content; }
-  }
-  @else if $media == medium-screens {
-    @media only screen and (min-width: 500px) and (max-width: 1024px) { @content; }
-  }
-  @else if $media == wide-screens {
-    @media only screen and (min-width: 1024px) { @content; }
+    @media only screen and (max-width: 320px) {
+      @content;
+    }
+  } @else if $media == medium-screens {
+    @media only screen and (min-width: 500px) and (max-width: 1024px) {
+      @content;
+    }
+  } @else if $media == wide-screens {
+    @media only screen and (min-width: 1024px) {
+      @content;
+    }
   }
 }
 
 @font-face {
-  font-family: "Permanent Marker";
-  src: asset-data-url("fonts/PermanentMarker-Regular.ttf");
+  font-family: 'Permanent Marker';
+  src: asset-data-url('fonts/PermanentMarker-Regular.ttf');
 }
 
 @font-face {
-  font-family: "Source Sans Pro";
-  src: asset-data-url("fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf");
+  font-family: 'Source Sans Pro';
+  src: asset-data-url('fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf');
 }
 
 body {
@@ -25,7 +29,7 @@ body {
 }
 
 .container {
-  margin-top:50px;
+  margin-top: 50px;
 }
 
 #background {
@@ -38,8 +42,12 @@ body {
 h1 {
   // font-family: 'Permanent Marker';
   color: white;
-  @include respond-to(medium-screens) { font-size: 8rem; }
-  @include respond-to(wide-screens) { font-size: 8rem; }
+  @include respond-to(medium-screens) {
+    font-size: 8rem;
+  }
+  @include respond-to(wide-screens) {
+    font-size: 8rem;
+  }
 }
 
 .login {
@@ -61,7 +69,8 @@ h1 {
   color: white;
 }
 
-.btn-success, .btn-outline-success {
+.btn-success,
+.btn-outline-success {
   background-color: #0290ff;
   border-color: #0290ff;
   color: white;
@@ -71,13 +80,13 @@ h1 {
   }
 }
 
-
 .artist-event-block {
   text-align: left;
 }
 
 h2 {
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-bottom: none;
+  padding-top: 29.5px;
 }
 
 h6 {
@@ -92,8 +101,8 @@ h5 {
 }
 
 .featuring {
-    font-size: .9rem;
-    margin-left: 10px;
+  font-size: 0.9rem;
+  margin-left: 10px;
 }
 
 .artist-event-block {
@@ -131,5 +140,20 @@ h5 {
   .event-actions {
     float: right;
     margin-top: 15px;
+  }
+}
+
+img.listen-on-spotify {
+  width: 150px;
+  padding: 20px;
+}
+
+.login .container {
+  max-width: 800px;
+  margin: auto;
+  margin-bottom: 50px;
+
+  h3 {
+    color: white;
   }
 }

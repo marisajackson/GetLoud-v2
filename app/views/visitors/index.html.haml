@@ -1,5 +1,9 @@
 .login
   -# %h1 ConcertWire
-  #logo.container
-    %img{:src => asset_url('logo-white.png')}
-  %a.btn.spotify-button{:href => @spotify_auth_url} Log In With Spotify
+  .container
+    #logo
+      %img{:src => asset_url('logo-white.png')}
+    %h3 ConcertWire creates a personalized Spotify playlist based on your musical interests and upcoming concerts in your city.
+
+
+  %a.btn.spotify-button{:href => @spotify_auth_url} Get Started
