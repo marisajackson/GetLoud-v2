@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root to: 'visitors#index'
+  get 'sign-up', to: 'visitors#sign_up'
   devise_for :users
 
   get 'email', to: 'visitors#email'

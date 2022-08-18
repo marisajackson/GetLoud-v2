@@ -1,16 +1,16 @@
 class UsersController < ApplicationController
 
     def set_metro_area
-      @user = User.find(current_user['id'])
-      @user.metro_area = params[:metroArea]
-      @user.save!
+      metro_area = params[:metroArea]
 
-      event = Event.find_by(metro_area: params[:metroArea])
+      event = Event.find_by(metro_area: metro_area)
 
       if(!event)
-        EventImportJob.perform_later @user.metro_area
+        EventImportJob.perform_later metro_area
       end
 
-      render :json => current_user['metro_area']
+      spotify_auth_url = SpotifyService.new(SpotifyUser.first).create_auth_url({metro_area: metro_area})
+
+      render :json => {spotify_auth_url: spotify_auth_url}, status: :ok
     end
 end

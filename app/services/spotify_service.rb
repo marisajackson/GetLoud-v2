@@ -22,13 +22,22 @@ class SpotifyService
     end
   end
 
-  def create_auth_url
+  def create_auth_url(state_data)
+    secret = Rails.application.credentials[Rails.env.to_sym][:secret_key_base]
+    len = ActiveSupport::MessageEncryptor.key_len
+    key   = ActiveSupport::KeyGenerator.new(secret).generate_key(secret, len)
+    crypt = ActiveSupport::MessageEncryptor.new(key)
+
+    state_data[:secret] = secret
+    state = JSON.generate(state_data)
+    state = crypt.encrypt_and_sign(state_data)
+
     query_params = {
        response_type: 'code',
        client_id: Rails.application.credentials[Rails.env.to_sym][:spotify][:client_id],
        scope: 'user-read-private user-read-email playlist-modify-public playlist-modify-private user-top-read',
        redirect_uri: Rails.application.credentials[Rails.env.to_sym][:spotify][:redirect_uri],
-       state: Rails.application.credentials[Rails.env.to_sym][:secret_key_base]
+       state: state
     }
 
     return "https://accounts.spotify.com/authorize?#{query_params.to_query}"
@@ -118,6 +127,11 @@ class SpotifyService
     user = User.find_by_id(@spotify_user.user_id)
     spotify_user = SpotifyUser.includes(:artists => :events).where(artists: {events: {metro_area: user.metro_area}}).find_by(id: @spotify_user.id)
     artists = spotify_user.artists
+
+    if(artists.length <= 7){
+      return;
+    }
+
     header = {Authorization: "Bearer #{spotify_user.access_token}"}
 
     playlist = Playlist.where('spotify_user_id = ?', spotify_user.id).last
@@ -159,7 +173,7 @@ class SpotifyService
         tracks = JSON.parse(track_response)
         tracks = tracks['tracks']
         tracks.each_with_index do |track, i|
-          if(i < 2)
+          if(i < 3)
             track_ids = track_ids.push(track['id'])
             playlist_track = PlaylistTrack.where('playlist_id = ?', playlist.id)
                                           .where('artist_id = ?', item.id)
@@ -197,7 +211,7 @@ class SpotifyService
       # POST https://api.spotify.com/v1/playlists/{playlist_id}/tracks
       playlist_track_params = { uris: tracklist }
 
-      
+
 
       RestClient.post("https://api.spotify.com/v1/playlists/#{playlist.spotify_id}/tracks", playlist_track_params.to_json, header)
     end

@@ -1,16 +1,32 @@
 class SpotifyController < ApplicationController
 
     def login
-        if params[:error] || !params[:state] || params[:state] != Rails.application.credentials[Rails.env.to_sym][:secret_key_base]
-            return
+        if params[:error] || !params[:state]
+          p "Something went wrong, please try again later.1"
+          raise Exception.new('Something went wrong, please try again later.2')
+        end
+
+        secret = Rails.application.credentials[Rails.env.to_sym][:secret_key_base]
+        len = ActiveSupport::MessageEncryptor.key_len
+        key   = ActiveSupport::KeyGenerator.new(secret).generate_key(secret, len)
+        crypt = ActiveSupport::MessageEncryptor.new(key)
+
+        begin
+          state = crypt.decrypt_and_verify(params[:state])
+        rescue
+          raise Exception.new('Something went wrong, please try again later.2')
+        end
+
+        if state[:secret] != secret
+          raise Exception.new('Something went wrong, please try again later.3')
         end
 
         body = {
-            grant_type: 'authorization_code',
-            code: params[:code],
-            client_id: Rails.application.credentials[Rails.env.to_sym][:spotify][:client_id],
-            client_secret: Rails.application.credentials[Rails.env.to_sym][:spotify][:secret],
-            redirect_uri: Rails.application.credentials[Rails.env.to_sym][:spotify][:redirect_uri],
+          grant_type: 'authorization_code',
+          code: params[:code],
+          client_id: Rails.application.credentials[Rails.env.to_sym][:spotify][:client_id],
+          client_secret: Rails.application.credentials[Rails.env.to_sym][:spotify][:secret],
+          redirect_uri: Rails.application.credentials[Rails.env.to_sym][:spotify][:redirect_uri],
         }
 
         auth_response = RestClient.post('https://accounts.spotify.com/api/token', body)
@@ -32,6 +48,7 @@ class SpotifyController < ApplicationController
           @user.email = user_params['email']
           @user.password = generated_password
           @user.password_confirmation = generated_password
+          @user.metro_area = state[:metro_area]
           @user.save!
         end
 
@@ -47,10 +64,6 @@ class SpotifyController < ApplicationController
         # SpotifyUserUpdateJob.perform_later spotify_user
 
         sign_in @user
-        if(@user.metro_area)
-          redirect_to :controller => 'visitors', :action => 'index'
-        else
-          render "users/setup"
-        end
+        redirect_to :controller => 'visitors', :action => 'index'
     end
 end

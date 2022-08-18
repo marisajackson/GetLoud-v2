@@ -157,3 +157,37 @@ img.listen-on-spotify {
     color: white;
   }
 }
+
+#sign-up {
+  max-width: 800px;
+  margin: auto;
+
+  #logo {
+    margin-bottom: 50px;
+  }
+
+  .form-group {
+    max-width: 400px;
+    margin: auto;
+  }
+
+  .form-check {
+    margin: 10px 0;
+  }
+
+  #create-playlist-button {
+    margin-top: 10px;
+  }
+
+  #sign-up-form.submitted {
+    .invalid {
+      color: red;
+    }
+
+    input:invalid,
+    select:invalid {
+      border: 2px solid red;
+      color: red;
+    }
+  }
+}
