@@ -28,9 +28,12 @@ class VisitorsController < ApplicationController
         else
           render "users/setup"
         end
-      else
-        @spotify_auth_url = SpotifyService.new(SpotifyUser.first).create_auth_url
       end
+    end
+
+    def sign_up
+      @spotify_auth_url = SpotifyService.new(SpotifyUser.first).create_auth_url({})
+      render "users/sign-up"
     end
 
     def logout

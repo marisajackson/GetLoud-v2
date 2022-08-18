@@ -128,9 +128,9 @@ class SpotifyService
     spotify_user = SpotifyUser.includes(:artists => :events).where(artists: {events: {metro_area: user.metro_area}}).find_by(id: @spotify_user.id)
     artists = spotify_user.artists
 
-    if(artists.length <= 7){
-      return;
-    }
+    if(artists.length <= 7)
+      return
+    end
 
     header = {Authorization: "Bearer #{spotify_user.access_token}"}
 
