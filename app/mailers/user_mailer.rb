@@ -2,6 +2,7 @@ class UserMailer < ApplicationMailer
   def weekly_update(user, spotify_user, force = false)
     # sendEmails  == 1
     if !user.send_emails && !force
+      logger.info "Emails turned off. Skipping User: #{user.email}"
       return
     end
 
@@ -15,6 +16,7 @@ class UserMailer < ApplicationMailer
                                 .where(user_id: user.id)
                                 .first()
     if recent_email && !force
+      logger.info "Recent Email. Skipping User: #{user.email}"
       return
     end
 
@@ -73,23 +75,12 @@ class UserMailer < ApplicationMailer
                   .having('COUNT(playlist_tracks.artist_id) > 5')
                   .limit(6)
 
-    email_history = EmailHistory.new
-    email_history.user_id = user.id
-    email_history.sent_at = Time.now
-    email_history.details = {
-      playlist_url: @playlist_url,
-      this_week_count: @this_week.length,
-      new_additions_count: @new_additions.length,
-      popular_count: @popular.length
-    }
-    email_history.save!
-
     artistNames = [];
     if(@new_additions)
       subject = 'Just Announced: '
       @new_additions.each do |event|
         event.artists.each do |artist|
-          if(artist.spotify_user_artists.relation_type == 0)
+          if(artist.spotify_user_artists && artist.spotify_user_artists[0].relation_type == 'direct')
             artistNames.push(artist.name);
           end
         end
@@ -112,6 +103,17 @@ class UserMailer < ApplicationMailer
     artistNames = artistNames.join(', ');
 
     subject = subject + artistNames;
+
+    email_history = EmailHistory.new
+    email_history.user_id = user.id
+    email_history.sent_at = Time.now
+    email_history.details = {
+      playlist_url: @playlist_url,
+      this_week_count: @this_week.length,
+      new_additions_count: @new_additions.length,
+      popular_count: @popular.length
+    }
+    email_history.save!
 
     mail(to: user.email, subject: subject)
   end
