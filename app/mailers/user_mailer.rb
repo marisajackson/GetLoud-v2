@@ -1,13 +1,14 @@
-class UserMailer < ApplicationMailer
-  def weekly_update(user, spotify_user, force = false)
+class UserMailer
+  def self.weekly_update(user, spotify_user, force = false)
     # sendEmails  == 1
     if !user.send_emails && !force
-      logger.info "Emails turned off. Skipping User: #{user.email}"
+      Rails.logger.info "Emails turned off. Skipping User: #{user.email}"
       return
     end
 
     playlist = Playlist.find_by(spotify_user_id: spotify_user.id)
     if(!playlist)
+      Rails.logger.info "No playlist found. Skipping User: #{user.email}"
       return
     end
 
@@ -16,7 +17,7 @@ class UserMailer < ApplicationMailer
                                 .where(user_id: user.id)
                                 .first()
     if recent_email && !force
-      logger.info "Recent Email. Skipping User: #{user.email}"
+      Rails.logger.info "Recent Email. Skipping User: #{user.email}"
       return
     end
 
@@ -39,6 +40,7 @@ class UserMailer < ApplicationMailer
 
     # only if this_week or new_additions
     if(@this_week.length == 0 && @new_additions.length == 0) && !force
+      Rails.logger.info "No new additions or this week. Skipping User: #{user.email}"
       return
     end
 
@@ -115,6 +117,19 @@ class UserMailer < ApplicationMailer
     }
     email_history.save!
 
-    mail(to: user.email, subject: subject)
+    template_data = {
+      "subject" => subject,
+      "preheader" => subject,
+      "spotifyPlaylistURL" => @playlist_url,
+      "this_week" => @this_week,
+      "new_additions" => @new_additions,
+      "popular" => @popular,
+      "city" => @city,
+      "new_additions_length" => @new_additions.length > 0,
+      "this_week_length" => @this_week.length > 0,
+      "popular_length" => @popular.length > 0,
+    }
+
+    return template_data
   end
 end
