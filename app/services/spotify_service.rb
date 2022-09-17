@@ -137,10 +137,11 @@ class SpotifyService
     playlist = Playlist.where('spotify_user_id = ?', spotify_user.id).last
 
     if(!playlist)
+      logger.info 'No Playlist Found. Creating Playlist...'
       # POST https://api.spotify.com/v1/users/{user_id}/playlists
       playlist_params = {
         name: 'ConcertWire',
-        description: 'Created by ConcertWire. This playlist includes songs from artists with concerts coming up in your area. To buy tickets to these concerts, visit concertwire.live'
+        description: 'Created by ConcertWire. This playlist includes songs from artists with concerts coming up in your area. To buy tickets to these concerts, visit www.concertwireplaylist.com'
       }
 
       playlist_response = RestClient.post("https://api.spotify.com/v1/users/#{spotify_user.spotify_id}/playlists", playlist_params.to_json, header)
@@ -152,12 +153,15 @@ class SpotifyService
       playlist.spotify_id = playlist_response['id']
       playlist.last_updated_at = Time.now
       playlist.save!
+      logger.info 'Playlist Created with id: ' + playlist.id.to_s
     else
+      logger.info 'Playlist Found. Removing Tracks...'
       playlist_params = { uris: [] }
       playlist_response = RestClient.put("https://api.spotify.com/v1/playlists/#{playlist.spotify_id}/tracks", playlist_params.to_json, header)
 
       playlist.last_updated_at = Time.now
       playlist.save!
+      logger.info 'Playlist Found. Tracks Removed.'
     end
 
     all_tracks = []
