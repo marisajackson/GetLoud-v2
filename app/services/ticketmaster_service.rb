@@ -34,6 +34,12 @@ class TicketmasterService
                      .first
 
         if !@event
+          @event = Event.where(event_api: 'ticketmaster')
+                     .where(event_api_id: item['id'])
+                     .first
+        end
+
+        if !@event
           @event = Event.new
         end
 
