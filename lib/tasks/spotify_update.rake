@@ -11,7 +11,7 @@ task :spotify_update, [:spotify_user_id] => :environment do |t, args|
     spotify_user = SpotifyUser.find(spotify_user_id)
     SpotifyUserUpdateJob.perform_later spotify_user
   else
-    spotify_users = SpotifyUser.all
+    spotify_users = SpotifyUser.where.not(deleted_at: nil).all
 
     spotify_users.each do |spotify_user|
       SpotifyUserUpdateJob.perform_later spotify_user
