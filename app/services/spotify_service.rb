@@ -124,11 +124,13 @@ class SpotifyService
   end
 
   def update_playlist
+    Rails.logger.info 'Updating Playlist for ' + @spotify_user.spotify_id.to_s
     user = User.find_by_id(@spotify_user.user_id)
     spotify_user = SpotifyUser.includes(:artists => :events).where(artists: {events: {metro_area: user.metro_area}}).find_by(id: @spotify_user.id)
     artists = spotify_user.artists
 
     if(artists.length <= 7)
+      Rails.logger.info 'Not enough artists found. Skipping Spotify User: ' + spotify_user.spotify_id.to_s
       return
     end
 
@@ -137,7 +139,7 @@ class SpotifyService
     playlist = Playlist.where('spotify_user_id = ?', spotify_user.id).last
 
     if(!playlist)
-      logger.info 'No Playlist Found. Creating Playlist...'
+      Rails.logger.info 'No Playlist Found. Creating Playlist...'
       # POST https://api.spotify.com/v1/users/{user_id}/playlists
       playlist_params = {
         name: 'ConcertWire',
@@ -153,15 +155,15 @@ class SpotifyService
       playlist.spotify_id = playlist_response['id']
       playlist.last_updated_at = Time.now
       playlist.save!
-      logger.info 'Playlist Created with id: ' + playlist.id.to_s
+      Rails.logger.info 'Playlist Created with id: ' + playlist.id.to_s
     else
-      logger.info 'Playlist Found. Removing Tracks...'
+      Rails.logger.info 'Playlist Found. Removing Tracks...'
       playlist_params = { uris: [] }
       playlist_response = RestClient.put("https://api.spotify.com/v1/playlists/#{playlist.spotify_id}/tracks", playlist_params.to_json, header)
 
       playlist.last_updated_at = Time.now
       playlist.save!
-      logger.info 'Playlist Found. Tracks Removed.'
+      Rails.logger.info 'Playlist Found. Tracks Removed.'
     end
 
     all_tracks = []
