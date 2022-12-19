@@ -130,7 +130,7 @@ class SpotifyService
     artists = spotify_user.artists
 
     if(artists.length <= 7)
-      Rails.logger.info 'Not enough artists found. Skipping Spotify User: ' + spotify_user.spotify_id.to_s
+      Rails.logger.info 'Not enough artists found: ' + artists.length.to_s + '. Skipping Spotify User: ' + spotify_user.spotify_id.to_s
       return
     end
 
